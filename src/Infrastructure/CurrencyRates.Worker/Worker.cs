@@ -62,7 +62,7 @@ public sealed class Worker(
 
                 var nominal = decimal.Parse(nominalText.Replace(',', '.'), CultureInfo.InvariantCulture);
                 var value = decimal.Parse(valueText.Replace(',', '.'), CultureInfo.InvariantCulture);
-                var rate = decimal.Round(value / nominal, 6, MidpointRounding.AwayFromZero);
+                var rate = decimal.Round(value / nominal, 4, MidpointRounding.AwayFromZero);
                 return new Currency { Name = charCode.ToUpperInvariant(), Rate = rate };
             })
             .Where(x => x is not null)

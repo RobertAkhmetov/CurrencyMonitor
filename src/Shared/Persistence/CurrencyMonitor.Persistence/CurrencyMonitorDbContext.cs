@@ -26,7 +26,7 @@ public sealed class CurrencyMonitorDbContext(DbContextOptions<CurrencyMonitorDbC
             entity.ToTable("currency");
             entity.HasKey(x => x.Id);
             entity.Property(x => x.Name).HasMaxLength(32).IsRequired();
-            entity.Property(x => x.Rate).HasPrecision(18, 6).IsRequired();
+            entity.Property(x => x.Rate).HasPrecision(10, 4).IsRequired();
             entity.HasIndex(x => x.Name).IsUnique();
         });
 
