@@ -60,16 +60,16 @@ public sealed class Worker(
                     return null;
                 }
 
-                var nominal = decimal.Parse(nominalText.Replace(',', '.'), CultureInfo.InvariantCulture);
-                var value = decimal.Parse(valueText.Replace(',', '.'), CultureInfo.InvariantCulture);
-                var rate = decimal.Round(value / nominal, 4, MidpointRounding.AwayFromZero);
+                var nominal = double.Parse(nominalText.Replace(',', '.'), CultureInfo.InvariantCulture);
+                var value = double.Parse(valueText.Replace(',', '.'), CultureInfo.InvariantCulture);
+                var rate = double.Round(value / nominal, 4, MidpointRounding.AwayFromZero);
                 return new Currency { Name = charCode.ToUpperInvariant(), Rate = rate };
             })
             .Where(x => x is not null)
             .Cast<Currency>()
             .ToList() ?? [];
 
-        rates.Add(new Currency { Name = "RUB", Rate = 1m });
+        rates.Add(new Currency { Name = "RUB", Rate = 1d });
 
         using var scope = serviceScopeFactory.CreateScope();
         var dbContext = scope.ServiceProvider.GetRequiredService<CurrencyMonitorDbContext>();

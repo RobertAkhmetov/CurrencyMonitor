@@ -119,7 +119,7 @@ public sealed class UserRepository(CurrencyMonitorDbContext dbContext) : IUserRe
             dbContext.Currencies.Add(new Currency
             {
                 Name = missing,
-                Rate = 0m
+                Rate = 0d
             });
         }
 

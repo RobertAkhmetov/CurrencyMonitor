@@ -12,8 +12,8 @@ public sealed class FinanceRepository(CurrencyMonitorDbContext dbContext) : IFin
         var rates = await dbContext.FavoriteCurrencies
             .Where(x => x.UserId == userId)
             .Include(x => x.Currency)
+            .OrderBy(x => x.Currency.Name)
             .Select(x => new CurrencyRateDto(x.Currency.Name, x.Currency.Rate))
-            .OrderBy(x => x.Name)
             .ToListAsync(cancellationToken);
 
         return rates;

@@ -3,7 +3,6 @@ using FinanceService.Application.Contracts;
 using FinanceService.Application.Features.Rates;
 using FluentAssertions;
 using Moq;
-using Xunit;
 
 namespace FinanceService.Tests;
 
@@ -16,8 +15,8 @@ public sealed class GetUserRatesQueryHandlerTests
         repository.Setup(x => x.GetRatesByUserAsync(7, It.IsAny<CancellationToken>()))
             .ReturnsAsync(new List<CurrencyRateDto>
             {
-                new("USD", 92.123456m),
-                new("EUR", 101.654321m)
+                new("USD", 92.123456d),
+                new("EUR", 101.654321d)
             });
 
         var handler = new GetUserRatesQueryHandler(repository.Object);
