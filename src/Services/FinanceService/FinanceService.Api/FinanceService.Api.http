@@ -1,6 +1,8 @@
 @FinanceService.Api_HostAddress = http://localhost:5058
 
-GET {{FinanceService.Api_HostAddress}}/weatherforecast/
+### Get user rates (requires Bearer token from UserService login)
+GET {{FinanceService.Api_HostAddress}}/api/finance/rates
 Accept: application/json
+Authorization: Bearer {{token}}
 
 ###

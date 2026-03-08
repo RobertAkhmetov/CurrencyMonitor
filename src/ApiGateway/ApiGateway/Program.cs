@@ -15,7 +15,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI(c =>
     {
         c.SwaggerEndpoint("/api-docs/merged.json", "UserService + FinanceService");
-        c.SwaggerEndpoint("/swagger/gateway/swagger.json", "Gateway (обзор)");
+        c.SwaggerEndpoint("/swagger/gateway/swagger.json", "Gateway");
     });
 }
 
@@ -60,7 +60,7 @@ app.MapGet("/api-docs/merged.json", async (IHttpClientFactory httpClientFactory,
         ["Bearer"] = new { type = "http", scheme = "bearer", bearerFormat = "JWT" }
     };
     merged["openapi"] = "3.0.0";
-    merged["info"] = new { title = "CurrencyMonitor (UserService + FinanceService)", version = "1.0" };
+    merged["info"] = new { title = "CurrencyMonitor API Gateway (UserService + FinanceService)", version = "1.0" };
     merged["servers"] = new[] { new { url = baseUrl } };
     merged["paths"] = paths;
     merged["components"] = components;

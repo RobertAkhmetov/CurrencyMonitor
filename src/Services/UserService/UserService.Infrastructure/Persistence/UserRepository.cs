@@ -9,10 +9,7 @@ namespace UserService.Infrastructure.Persistence;
 public sealed class UserRepository(CurrencyMonitorDbContext dbContext) : IUserRepository
 {
     public Task<bool> ExistsByNameAsync(string name, CancellationToken cancellationToken)
-    {
-        var normalized = name.Trim().ToLower();
-        return dbContext.Users.AnyAsync(x => x.Name.ToLower() == normalized, cancellationToken);
-    }
+        => dbContext.Users.AnyAsync(x => x.Name.ToLower() == name.Trim().ToLower(), cancellationToken);
 
     public async Task<UserIdentity?> GetByNameAsync(string name, CancellationToken cancellationToken)
     {
@@ -98,9 +95,7 @@ public sealed class UserRepository(CurrencyMonitorDbContext dbContext) : IUserRe
     }
 
     public Task<bool> IsTokenRevokedAsync(string jti, CancellationToken cancellationToken)
-    {
-        return dbContext.RevokedTokens.AnyAsync(x => x.Jti == jti, cancellationToken);
-    }
+        => dbContext.RevokedTokens.AnyAsync(x => x.Jti == jti, cancellationToken);
 
     private async Task<List<Currency>> GetOrCreateCurrenciesAsync(IReadOnlyCollection<string> currencyNames, CancellationToken cancellationToken)
     {
@@ -133,8 +128,5 @@ public sealed class UserRepository(CurrencyMonitorDbContext dbContext) : IUserRe
     }
 
     private static UserIdentity Map(AppUser user)
-    {
-        var favorites = user.FavoriteCurrencies.Select(x => x.Currency.Name).OrderBy(x => x).ToArray();
-        return new UserIdentity(user.Id, user.Name, user.Password, favorites);
-    }
+        => new(user.Id, user.Name, user.Password, user.FavoriteCurrencies.Select(x => x.Currency.Name).OrderBy(x => x).ToArray());
 }

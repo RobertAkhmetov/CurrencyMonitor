@@ -1,9 +1,8 @@
-using System.Globalization;
-using System.Net.Http;
-using System.Xml.Linq;
 using CurrencyMonitor.Persistence;
 using CurrencyMonitor.Persistence.Entities;
 using Microsoft.EntityFrameworkCore;
+using System.Globalization;
+using System.Xml.Linq;
 
 namespace CurrencyRates.Worker;
 
