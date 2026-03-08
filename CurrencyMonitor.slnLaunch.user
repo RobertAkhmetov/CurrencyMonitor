@@ -1,0 +1,19 @@
+[
+  {
+    "Name": "UserService, FinanceService, ApiGateway",
+    "Projects": [
+      {
+        "Path": "src/Services/UserService/UserService.Api/UserService.Api.csproj",
+        "Action": "StartWithoutDebugging"
+      },
+      {
+        "Path": "src/Services/FinanceService/FinanceService.Api/FinanceService.Api.csproj",
+        "Action": "StartWithoutDebugging"
+      },
+      {
+        "Path": "src/ApiGateway/ApiGateway/ApiGateway.csproj",
+        "Action": "StartWithoutDebugging"
+      }
+    ]
+  }
+]
