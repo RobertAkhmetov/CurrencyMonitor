@@ -1,0 +1,15 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <ItemGroup>
+    <ProjectReference Include="..\FinanceService.Application\FinanceService.Application.csproj" />
+    <ProjectReference Include="..\FinanceService.Domain\FinanceService.Domain.csproj" />
+    <ProjectReference Include="..\..\..\Shared\Persistence\CurrencyMonitor.Persistence\CurrencyMonitor.Persistence.csproj" />
+  </ItemGroup>
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+</Project>

@@ -1,0 +1,84 @@
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
+using System.Text;
+using FinanceService.Application;
+using FinanceService.Application.Abstractions;
+using FinanceService.Application.Features.Rates;
+using FinanceService.Infrastructure;
+using FinanceService.Infrastructure.Options;
+using MediatR;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
+
+var builder = WebApplication.CreateBuilder(args);
+
+builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddSwaggerGen();
+builder.Services.AddFinanceApplication();
+builder.Services.AddFinanceInfrastructure(builder.Configuration);
+
+var jwtOptions = builder.Configuration.GetSection(JwtOptions.SectionName).Get<JwtOptions>()
+                 ?? throw new InvalidOperationException("Jwt options are not configured.");
+
+builder.Services
+    .AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+    .AddJwtBearer(options =>
+    {
+        options.TokenValidationParameters = new TokenValidationParameters
+        {
+            ValidateIssuer = true,
+            ValidateAudience = true,
+            ValidateIssuerSigningKey = true,
+            ValidateLifetime = true,
+            ValidIssuer = jwtOptions.Issuer,
+            ValidAudience = jwtOptions.Audience,
+            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtOptions.Secret)),
+            ClockSkew = TimeSpan.Zero
+        };
+        options.Events = new JwtBearerEvents
+        {
+            OnTokenValidated = async context =>
+            {
+                var jti = context.Principal?.FindFirstValue(JwtRegisteredClaimNames.Jti);
+                if (string.IsNullOrWhiteSpace(jti))
+                {
+                    context.Fail("Token jti is missing.");
+                    return;
+                }
+
+                var repository = context.HttpContext.RequestServices.GetRequiredService<IFinanceRepository>();
+                var isRevoked = await repository.IsTokenRevokedAsync(jti, context.HttpContext.RequestAborted);
+                if (isRevoked)
+                {
+                    context.Fail("Token is revoked.");
+                }
+            }
+        };
+    });
+
+builder.Services.AddAuthorization();
+
+var app = builder.Build();
+
+if (app.Environment.IsDevelopment())
+{
+    app.UseSwagger();
+    app.UseSwaggerUI();
+}
+
+app.UseAuthentication();
+app.UseAuthorization();
+
+app.MapGet("/api/finance/rates", async (ClaimsPrincipal principal, ISender sender, CancellationToken cancellationToken) =>
+{
+    var userIdRaw = principal.FindFirstValue(ClaimTypes.NameIdentifier);
+    if (!int.TryParse(userIdRaw, out var userId))
+    {
+        return Results.Unauthorized();
+    }
+
+    var response = await sender.Send(new GetUserRatesQuery(userId), cancellationToken);
+    return Results.Ok(response);
+}).RequireAuthorization();
+
+app.Run();

@@ -1,0 +1,72 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "UserService.Api",
+      "type": "coreclr",
+      "request": "launch",
+      "preLaunchTask": "build",
+      "program": "${workspaceFolder}/src/Services/UserService/UserService.Api/bin/Debug/net8.0/UserService.Api.dll",
+      "cwd": "${workspaceFolder}/src/Services/UserService/UserService.Api",
+      "env": {
+        "ASPNETCORE_ENVIRONMENT": "Development"
+      },
+      "stopAtEntry": false
+    },
+    {
+      "name": "FinanceService.Api",
+      "type": "coreclr",
+      "request": "launch",
+      "preLaunchTask": "build",
+      "program": "${workspaceFolder}/src/Services/FinanceService/FinanceService.Api/bin/Debug/net8.0/FinanceService.Api.dll",
+      "cwd": "${workspaceFolder}/src/Services/FinanceService/FinanceService.Api",
+      "env": {
+        "ASPNETCORE_ENVIRONMENT": "Development"
+      },
+      "stopAtEntry": false
+    },
+    {
+      "name": "ApiGateway",
+      "type": "coreclr",
+      "request": "launch",
+      "preLaunchTask": "build",
+      "program": "${workspaceFolder}/src/ApiGateway/ApiGateway/bin/Debug/net8.0/ApiGateway.dll",
+      "cwd": "${workspaceFolder}/src/ApiGateway/ApiGateway",
+      "env": {
+        "ASPNETCORE_ENVIRONMENT": "Development"
+      },
+      "stopAtEntry": false
+    },
+    {
+      "name": "CurrencyRates.Worker",
+      "type": "coreclr",
+      "request": "launch",
+      "preLaunchTask": "build",
+      "program": "${workspaceFolder}/src/Infrastructure/CurrencyRates.Worker/bin/Debug/net8.0/CurrencyRates.Worker.dll",
+      "cwd": "${workspaceFolder}/src/Infrastructure/CurrencyRates.Worker",
+      "env": {
+        "DOTNET_ENVIRONMENT": "Development"
+      },
+      "stopAtEntry": false
+    }
+  ],
+  "compounds": [
+    {
+      "name": "All APIs + Worker",
+      "configurations": [
+        "UserService.Api",
+        "FinanceService.Api",
+        "ApiGateway",
+        "CurrencyRates.Worker"
+      ]
+    },
+    {
+      "name": "All APIs",
+      "configurations": [
+        "UserService.Api",
+        "FinanceService.Api",
+        "ApiGateway"
+      ]
+    }
+  ]
+}
