@@ -2,7 +2,7 @@ version: "3.9"
 
 services:
   postgres:
-    image: postgres:16
+    image: postgres:17
     container_name: currency_monitor_postgres
     environment:
       POSTGRES_DB: currency_monitor

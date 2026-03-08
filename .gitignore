@@ -1,9 +1,6 @@
 bin/
 obj/
 .vs/
-.vscode/*
-!.vscode/launch.json
-!.vscode/tasks.json
-!.vscode/extensions.json
+.vscode/
 TestResults/
 .DS_Store
