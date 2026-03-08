@@ -12,17 +12,17 @@
 ## Структура
 
 - `src/Shared/Persistence` — EF Core `DbContext`, сущности и миграции
-- `src/Services/UserService` — Clean Architecture + CQRS
-- `src/Services/FinanceService` — Clean Architecture + CQRS
-- `src/Infrastructure/DatabaseMigrator` — сервис миграции
-- `src/Infrastructure/CurrencyRates.Worker` — фоновый сервис курсов
+- `src/Services/UserService` — сервис пользователей (Clean Architecture + CQRS)
+- `src/Services/FinanceService` — сервис финансов (Clean Architecture + CQRS)
+- `src/Infrastructure/DatabaseMigrator` — сервис миграции БД
+- `src/Infrastructure/CurrencyRates.Worker` — фоновый сервис обновления курсов валют
 - `src/ApiGateway/ApiGateway` — API Gateway
 - `tests` — unit-тесты
 
 ## Требования
 
 - .NET SDK 8
-- PostgreSQL 16+ или Docker
+- PostgreSQL 17 или Docker с контейнером Postgre данной версии
 
 ## Быстрый старт
 
