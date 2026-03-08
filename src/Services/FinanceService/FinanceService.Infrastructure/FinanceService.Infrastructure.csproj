@@ -1,6 +1,10 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <ItemGroup>
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Relational" Version="8.0.24" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\FinanceService.Application\FinanceService.Application.csproj" />
     <ProjectReference Include="..\FinanceService.Domain\FinanceService.Domain.csproj" />
     <ProjectReference Include="..\..\..\Shared\Persistence\CurrencyMonitor.Persistence\CurrencyMonitor.Persistence.csproj" />

@@ -1,5 +1,8 @@
+using System.Text;
 using CurrencyRates.Worker;
 using CurrencyMonitor.Persistence;
+
+Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
 
 var builder = Host.CreateApplicationBuilder(args);
 builder.Services.AddCurrencyMonitorPersistence(builder.Configuration);

@@ -36,7 +36,11 @@ public sealed class Worker(
     private async Task UpdateRates(CancellationToken cancellationToken)
     {
         var client = httpClientFactory.CreateClient();
-        using var response = await client.GetAsync(SourceUrl, cancellationToken);
+        using var request = new HttpRequestMessage(HttpMethod.Get, SourceUrl);
+        request.Headers.TryAddWithoutValidation("User-Agent",
+            "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36");
+
+        using var response = await client.SendAsync(request, cancellationToken);
         response.EnsureSuccessStatusCode();
 
         var content = await response.Content.ReadAsStringAsync(cancellationToken);
