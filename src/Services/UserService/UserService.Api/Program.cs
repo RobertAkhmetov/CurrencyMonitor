@@ -1,18 +1,14 @@
 using System.IdentityModel.Tokens.Jwt;
+using System.Reflection;
 using System.Security.Claims;
 using System.Text;
 using MediatR;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
-using UserService.Api.Contracts;
 using UserService.Application;
 using UserService.Application.Abstractions;
-using UserService.Application.Exceptions;
-using UserService.Application.Features.Favorites;
-using UserService.Application.Features.Login;
-using UserService.Application.Features.Logout;
-using UserService.Application.Features.Register;
+using UserService.Api.Endpoints;
 using UserService.Infrastructure;
 using UserService.Infrastructure.Options;
 
@@ -36,6 +32,7 @@ builder.Services.AddSwaggerGen(c =>
         }
     });
 });
+builder.Services.AddEndpoints(Assembly.GetCallingAssembly());
 builder.Services.AddUserApplication();
 builder.Services.AddUserInfrastructure(builder.Configuration);
 
@@ -91,67 +88,6 @@ if (app.Environment.IsDevelopment())
 app.UseAuthentication();
 app.UseAuthorization();
 
-app.MapPost("/api/user/register", async (RegisterRequest request, ISender sender, CancellationToken cancellationToken) =>
-{
-    try
-    {
-        var response = await sender.Send(new RegisterUserCommand(request.Name, request.Password, request.Favorites ?? []), cancellationToken);
-        return Results.Ok(response);
-    }
-    catch (ConflictException ex)
-    {
-        return Results.Conflict(new { message = ex.Message });
-    }
-    catch (UnauthorizedException ex)
-    {
-        return Results.BadRequest(new { message = ex.Message });
-    }
-});
-
-app.MapPost("/api/user/login", async (LoginRequest request, ISender sender, CancellationToken cancellationToken) =>
-{
-    try
-    {
-        var response = await sender.Send(new LoginCommand(request.Name, request.Password), cancellationToken);
-        return Results.Ok(response);
-    }
-    catch (UnauthorizedException)
-    {
-        return Results.Unauthorized();
-    }
-});
-
-app.MapPost("/api/user/logout", async (ClaimsPrincipal principal, ISender sender, CancellationToken cancellationToken) =>
-{
-    var jti = principal.FindFirstValue(JwtRegisteredClaimNames.Jti);
-    var expiresAtRaw = principal.FindFirstValue(JwtRegisteredClaimNames.Exp);
-    if (string.IsNullOrWhiteSpace(jti) || string.IsNullOrWhiteSpace(expiresAtRaw) || !long.TryParse(expiresAtRaw, out var expUnix))
-    {
-        return Results.BadRequest(new { message = "Token payload is invalid." });
-    }
-
-    var expiresAtUtc = DateTimeOffset.FromUnixTimeSeconds(expUnix).UtcDateTime;
-    await sender.Send(new LogoutCommand(jti, expiresAtUtc), cancellationToken);
-    return Results.Ok();
-}).RequireAuthorization();
-
-app.MapPut("/api/user/favorites", async (UpdateFavoritesRequest request, ClaimsPrincipal principal, ISender sender, CancellationToken cancellationToken) =>
-{
-    var userIdRaw = principal.FindFirstValue(ClaimTypes.NameIdentifier);
-    if (!int.TryParse(userIdRaw, out var userId))
-    {
-        return Results.Unauthorized();
-    }
-
-    try
-    {
-        var response = await sender.Send(new UpdateFavoritesCommand(userId, request.Favorites), cancellationToken);
-        return Results.Ok(response);
-    }
-    catch (UnauthorizedException)
-    {
-        return Results.Unauthorized();
-    }
-}).RequireAuthorization();
+app.MapEndpoints(app.MapGroup("/api/user"));
 
 app.Run();

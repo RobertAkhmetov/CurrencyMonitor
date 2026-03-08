@@ -1,9 +1,10 @@
 using System.IdentityModel.Tokens.Jwt;
+using System.Reflection;
 using System.Security.Claims;
 using System.Text;
+using FinanceService.Api.Endpoints;
 using FinanceService.Application;
 using FinanceService.Application.Abstractions;
-using FinanceService.Application.Features.Rates;
 using FinanceService.Infrastructure;
 using FinanceService.Infrastructure.Options;
 using MediatR;
@@ -31,6 +32,7 @@ builder.Services.AddSwaggerGen(c =>
         }
     });
 });
+builder.Services.AddEndpoints(Assembly.GetCallingAssembly());
 builder.Services.AddFinanceApplication();
 builder.Services.AddFinanceInfrastructure(builder.Configuration);
 
@@ -86,16 +88,6 @@ if (app.Environment.IsDevelopment())
 app.UseAuthentication();
 app.UseAuthorization();
 
-app.MapGet("/api/finance/rates", async (ClaimsPrincipal principal, ISender sender, CancellationToken cancellationToken) =>
-{
-    var userIdRaw = principal.FindFirstValue(ClaimTypes.NameIdentifier);
-    if (!int.TryParse(userIdRaw, out var userId))
-    {
-        return Results.Unauthorized();
-    }
-
-    var response = await sender.Send(new GetUserRatesQuery(userId), cancellationToken);
-    return Results.Ok(response);
-}).RequireAuthorization();
+app.MapEndpoints(app.MapGroup("/api/finance"));
 
 app.Run();
