@@ -4,7 +4,6 @@ using UserService.Application.Abstractions;
 using UserService.Application.Contracts;
 using UserService.Application.Exceptions;
 using UserService.Application.Features.Register;
-using Xunit;
 
 namespace UserService.Tests;
 

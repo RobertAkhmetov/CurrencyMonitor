@@ -1,5 +1,5 @@
-using System.Security.Claims;
 using MediatR;
+using System.Security.Claims;
 using UserService.Api.Contracts;
 using UserService.Application.Exceptions;
 using UserService.Application.Features.Favorites;

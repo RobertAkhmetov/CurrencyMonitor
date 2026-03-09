@@ -1,6 +1,6 @@
-using System.Security.Claims;
 using FinanceService.Application.Features.Rates;
 using MediatR;
+using System.Security.Claims;
 
 namespace FinanceService.Api.Endpoints;
 

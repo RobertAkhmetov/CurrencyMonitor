@@ -1,14 +1,13 @@
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
+using Microsoft.OpenApi.Models;
 using System.IdentityModel.Tokens.Jwt;
 using System.Reflection;
 using System.Security.Claims;
 using System.Text;
-using MediatR;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.IdentityModel.Tokens;
-using Microsoft.OpenApi.Models;
+using UserService.Api.Endpoints;
 using UserService.Application;
 using UserService.Application.Abstractions;
-using UserService.Api.Endpoints;
 using UserService.Infrastructure;
 using UserService.Infrastructure.Options;
 

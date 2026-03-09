@@ -1,6 +1,6 @@
-using System.Text;
-using CurrencyRates.Worker;
 using CurrencyMonitor.Persistence;
+using CurrencyRates.Worker;
+using System.Text;
 
 Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
 
