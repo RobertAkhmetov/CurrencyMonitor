@@ -11,11 +11,7 @@ internal sealed class FavoritesEndpoint : IEndpoint
     public void MapEndpoint(IEndpointRouteBuilder app) =>
         app.MapPut("/favorites", async (UpdateFavoritesRequest request, ClaimsPrincipal principal, ISender sender, CancellationToken ct) =>
         {
-            var userIdRaw = principal.FindFirstValue(ClaimTypes.NameIdentifier);
-            if (!int.TryParse(userIdRaw, out var userId))
-            {
-                return Results.Unauthorized();
-            }
+            var userId = int.Parse(principal.FindFirstValue(ClaimTypes.NameIdentifier)!);
 
             try
             {

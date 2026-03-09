@@ -9,11 +9,7 @@ internal sealed class RatesEndpoint : IEndpoint
     public void MapEndpoint(IEndpointRouteBuilder app) =>
         app.MapGet("/rates", async (ClaimsPrincipal principal, ISender sender, CancellationToken ct) =>
         {
-            var userIdRaw = principal.FindFirstValue(ClaimTypes.NameIdentifier);
-            if (!int.TryParse(userIdRaw, out var userId))
-            {
-                return Results.Unauthorized();
-            }
+            var userId = int.Parse(principal.FindFirstValue(ClaimTypes.NameIdentifier)!);
 
             var response = await sender.Send(new GetUserRatesQuery(userId), ct);
             return Results.Ok(response);
