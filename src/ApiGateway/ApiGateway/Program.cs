@@ -15,7 +15,6 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI(c =>
     {
         c.SwaggerEndpoint("/api-docs/merged.json", "UserService + FinanceService");
-        c.SwaggerEndpoint("/swagger/gateway/swagger.json", "Gateway");
     });
 }
 
