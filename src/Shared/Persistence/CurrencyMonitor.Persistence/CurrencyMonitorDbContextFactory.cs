@@ -7,8 +7,7 @@ public sealed class CurrencyMonitorDbContextFactory : IDesignTimeDbContextFactor
 {
     public CurrencyMonitorDbContext CreateDbContext(string[] args)
     {
-        var connectionString = Environment.GetEnvironmentVariable("POSTGRES_CONNECTION")
-                               ?? "Host=localhost;Port=5432;Database=currency_monitor;Username=postgres;Password=postgres";
+        var connectionString = Environment.GetEnvironmentVariable("POSTGRES_CONNECTION");
 
         var optionsBuilder = new DbContextOptionsBuilder<CurrencyMonitorDbContext>();
         optionsBuilder.UseNpgsql(connectionString);

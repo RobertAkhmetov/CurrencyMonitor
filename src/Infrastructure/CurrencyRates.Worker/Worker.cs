@@ -13,7 +13,7 @@ public sealed class Worker(
     IConfiguration configuration) : BackgroundService
 {
     private const string SourceUrl = "http://www.cbr.ru/scripts/XML_daily.asp";
-    private readonly TimeSpan _interval = TimeSpan.FromMinutes(configuration.GetValue("Worker:UpdateIntervalMinutes", 30));
+    private readonly TimeSpan _interval = TimeSpan.FromSeconds(configuration.GetValue("Worker:UpdateIntervalMinutes", 30));
 
     protected override async Task ExecuteAsync(CancellationToken stoppingToken)
     {
@@ -67,8 +67,6 @@ public sealed class Worker(
             .Where(x => x is not null)
             .Cast<Currency>()
             .ToList() ?? [];
-
-        rates.Add(new Currency { Name = "RUB", Rate = 1d });
 
         using var scope = serviceScopeFactory.CreateScope();
         var dbContext = scope.ServiceProvider.GetRequiredService<CurrencyMonitorDbContext>();
