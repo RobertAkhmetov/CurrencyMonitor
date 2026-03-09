@@ -40,6 +40,6 @@ public sealed class JwtTokenProvider(IOptions<JwtOptions> options) : IJwtTokenPr
             signingCredentials: credentials);
 
         var token = new JwtSecurityTokenHandler().WriteToken(jwt);
-        return new AuthResult(user.UserId, user.Name, token, expires, user.Favorites);
+        return new AuthResult(user.UserId, user.Name, token, expires);
     }
 }

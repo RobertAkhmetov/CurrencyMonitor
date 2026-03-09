@@ -5,7 +5,7 @@ using UserService.Application.Exceptions;
 
 namespace UserService.Application.Features.Register;
 
-public sealed record RegisterUserCommand(string Name, string Password, IReadOnlyCollection<string> Favorites) : IRequest<AuthResult>;
+public sealed record RegisterUserCommand(string Name, string Password) : IRequest<AuthResult>;
 
 public sealed class RegisterUserCommandHandler(
     IUserRepository userRepository,
@@ -26,14 +26,8 @@ public sealed class RegisterUserCommandHandler(
             throw new ConflictException("User with this name already exists.");
         }
 
-        var favorites = request.Favorites
-            .Where(x => !string.IsNullOrWhiteSpace(x))
-            .Select(x => x.Trim().ToUpperInvariant())
-            .Distinct()
-            .ToArray();
-
         var passwordHash = passwordHasher.Hash(request.Password);
-        var user = await userRepository.CreateAsync(normalizedName, passwordHash, favorites, cancellationToken);
+        var user = await userRepository.CreateAsync(normalizedName, passwordHash, cancellationToken);
         return jwtTokenProvider.Create(user);
     }
 }

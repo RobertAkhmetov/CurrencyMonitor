@@ -32,10 +32,8 @@ public sealed class UserRepository(CurrencyMonitorDbContext dbContext) : IUserRe
         return user is null ? null : Map(user);
     }
 
-    public async Task<UserIdentity> CreateAsync(string name, string passwordHash, IReadOnlyCollection<string> favorites, CancellationToken cancellationToken)
+    public async Task<UserIdentity> CreateAsync(string name, string passwordHash, CancellationToken cancellationToken)
     {
-        var currencies = await GetOrCreateCurrenciesAsync(favorites, cancellationToken);
-
         var user = new AppUser
         {
             Name = name,
@@ -45,16 +43,6 @@ public sealed class UserRepository(CurrencyMonitorDbContext dbContext) : IUserRe
         dbContext.Users.Add(user);
         await dbContext.SaveChangesAsync(cancellationToken);
 
-        foreach (var currency in currencies)
-        {
-            dbContext.FavoriteCurrencies.Add(new FavoriteCurrency
-            {
-                UserId = user.Id,
-                CurrencyId = currency.Id
-            });
-        }
-
-        await dbContext.SaveChangesAsync(cancellationToken);
         return (await GetByIdAsync(user.Id, cancellationToken))!;
     }
 

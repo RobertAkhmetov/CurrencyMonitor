@@ -20,7 +20,7 @@ public sealed class RegisterUserCommandHandlerTests
         var tokenProvider = new Mock<IJwtTokenProvider>();
 
         var handler = new RegisterUserCommandHandler(userRepository.Object, passwordHasher.Object, tokenProvider.Object);
-        var command = new RegisterUserCommand("alice", "pass", []);
+        var command = new RegisterUserCommand("alice", "pass");
 
         var act = () => handler.Handle(command, CancellationToken.None);
 
@@ -33,7 +33,7 @@ public sealed class RegisterUserCommandHandlerTests
         var userRepository = new Mock<IUserRepository>();
         userRepository.Setup(x => x.ExistsByNameAsync("alice", It.IsAny<CancellationToken>()))
             .ReturnsAsync(false);
-        userRepository.Setup(x => x.CreateAsync("alice", "hash", It.IsAny<IReadOnlyCollection<string>>(), It.IsAny<CancellationToken>()))
+        userRepository.Setup(x => x.CreateAsync("alice", "hash", It.IsAny<CancellationToken>()))
             .ReturnsAsync(new UserIdentity(1, "alice", "hash", ["USD"]));
 
         var passwordHasher = new Mock<IPasswordHasher>();
@@ -41,14 +41,13 @@ public sealed class RegisterUserCommandHandlerTests
 
         var tokenProvider = new Mock<IJwtTokenProvider>();
         tokenProvider.Setup(x => x.Create(It.IsAny<UserIdentity>()))
-            .Returns(new AuthResult(1, "alice", "token", DateTime.UtcNow.AddHours(1), ["USD"]));
+            .Returns(new AuthResult(1, "alice", "token", DateTime.UtcNow.AddHours(1)));
 
         var handler = new RegisterUserCommandHandler(userRepository.Object, passwordHasher.Object, tokenProvider.Object);
-        var command = new RegisterUserCommand("alice", "pass", ["usd"]);
+        var command = new RegisterUserCommand("alice", "pass");
 
         var result = await handler.Handle(command, CancellationToken.None);
 
         result.Token.Should().Be("token");
-        result.Favorites.Should().ContainSingle().Which.Should().Be("USD");
     }
 }

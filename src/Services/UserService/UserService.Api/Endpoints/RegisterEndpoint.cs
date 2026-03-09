@@ -13,7 +13,7 @@ internal sealed class RegisterEndpoint : IEndpoint
             try
             {
                 var response = await sender.Send(
-                    new RegisterUserCommand(request.Name, request.Password, request.Favorites ?? []), ct);
+                    new RegisterUserCommand(request.Name, request.Password), ct);
                 return Results.Ok(response);
             }
             catch (ConflictException ex)

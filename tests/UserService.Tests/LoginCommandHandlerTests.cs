@@ -40,7 +40,7 @@ public sealed class LoginCommandHandlerTests
 
         var tokenProvider = new Mock<IJwtTokenProvider>();
         tokenProvider.Setup(x => x.Create(user))
-            .Returns(new AuthResult(1, "alice", "token", DateTime.UtcNow.AddHours(1), ["EUR"]));
+            .Returns(new AuthResult(1, "alice", "token", DateTime.UtcNow.AddHours(1)));
 
         var handler = new LoginCommandHandler(userRepository.Object, passwordHasher.Object, tokenProvider.Object);
         var result = await handler.Handle(new LoginCommand("alice", "pass"), CancellationToken.None);
