@@ -1,16 +1,15 @@
-using System.IdentityModel.Tokens.Jwt;
-using System.Reflection;
-using System.Security.Claims;
-using System.Text;
 using FinanceService.Api.Endpoints;
 using FinanceService.Application;
 using FinanceService.Application.Abstractions;
 using FinanceService.Infrastructure;
 using FinanceService.Infrastructure.Options;
-using MediatR;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using System.IdentityModel.Tokens.Jwt;
+using System.Reflection;
+using System.Security.Claims;
+using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 

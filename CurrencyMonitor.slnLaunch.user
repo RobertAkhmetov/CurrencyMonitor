@@ -1,6 +1,6 @@
 [
   {
-    "Name": "UserService, FinanceService, ApiGateway",
+    "Name": "ApiGateway (UserService + FinanceService)",
     "Projects": [
       {
         "Path": "src/Services/UserService/UserService.Api/UserService.Api.csproj",
@@ -12,6 +12,27 @@
       },
       {
         "Path": "src/ApiGateway/ApiGateway/ApiGateway.csproj",
+        "Action": "StartWithoutDebugging"
+      }
+    ]
+  },
+  {
+    "Name": "All services (UserService + FinanceService + CurrencyRates.Worker)",
+    "Projects": [
+      {
+        "Path": "src/Services/UserService/UserService.Api/UserService.Api.csproj",
+        "Action": "StartWithoutDebugging"
+      },
+      {
+        "Path": "src/Services/FinanceService/FinanceService.Api/FinanceService.Api.csproj",
+        "Action": "StartWithoutDebugging"
+      },
+      {
+        "Path": "src/ApiGateway/ApiGateway/ApiGateway.csproj",
+        "Action": "StartWithoutDebugging"
+      },
+      {
+        "Path": "src/Infrastructure/CurrencyRates.Worker/CurrencyRates.Worker.csproj",
         "Action": "StartWithoutDebugging"
       }
     ]

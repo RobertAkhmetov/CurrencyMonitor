@@ -2,12 +2,35 @@
 
 Решение на .NET 8 с микросервисной архитектурой:
 
+Инфраструктура уровня решения (src/Infrastructure)
 - `DatabaseMigrator` для миграции БД Postgres
 - `CurrencyRates.Worker` для фонового обновления курсов из ЦБ РФ
+
+Обособленные сервисы
 - `UserService` для регистрации, логина, логаута и управления избранными валютами
 - `FinanceService` для получения курсов избранных валют пользователя
 - `ApiGateway` (YARP) для единой точки входа
 - unit-тесты для `UserService.Application` и `FinanceService.Application`
+
+## Как запустить все сервисы (All services)
+
+1. **Перед запуском всех сервисов обязательно применить миграции БД**:
+
+```bash
+dotnet run --project src/Infrastructure/DatabaseMigrator/DatabaseMigrator.csproj
+```
+
+2. **Запустить все сервисы (UserService + FinanceService + ApiGateway + CurrencyRates.Worker)** 
+- в VS выбрать профиль "AllServices..." и запустить 
+— вариант 2 через `dotnet run`:
+
+```bash
+dotnet run --project src/Services/UserService/UserService.Api/UserService.Api.csproj
+dotnet run --project src/Services/FinanceService/FinanceService.Api/FinanceService.Api.csproj
+dotnet run --project src/ApiGateway/ApiGateway/ApiGateway.csproj
+dotnet run --project src/Infrastructure/CurrencyRates.Worker/CurrencyRates.Worker.csproj
+```
+
 
 ## Структура
 
@@ -22,7 +45,7 @@
 ## Требования
 
 - .NET SDK 8
-- PostgreSQL 17 или Docker с контейнером Postgre данной версии
+- PostgreSQL 17 или Docker с контейнером Postgre данной версии (по умолчанию сервисы используют адрес БД localhost:5432, чтобы изменить адрес, нужно внести правки в appsettings.json нужного сервиса)
 
 ## Быстрый старт
 
